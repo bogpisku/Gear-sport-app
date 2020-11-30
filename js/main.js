@@ -17,8 +17,9 @@ window.onload = function() {
     var laccSensor = tizen.sensorservice.getDefaultSensor('LINEAR_ACCELERATION');
     //SERVER CONNECTION
     var webSocketUrl = 'ws://192.168.1.73:8080/socket.io/?EIO=3&transport=websocket';
+    //var webSocketUrl = 'wss://192.168.1.73:8080/';
     var webSocket;
-
+    var d = new Date();
     // Sample code
     var textbox = document.querySelector('.contents');
     textbox.addEventListener("click", function() {
@@ -84,23 +85,25 @@ window.onload = function() {
     function active_deactiveServices(activate) {
         if (activate){
         	//gyroscope sensor
-        	gyroSensor.start(OnsuccessCB);
-            gyroSensor.setChangeListener(gyroOnchangedCB, 400);
+        	//gyroSensor.start(OnsuccessCB);
+            //gyroSensor.setChangeListener(gyroOnchangedCB, 10);
             //gravity sensor
-            gravSensor.setChangeListener(gravOnchangedCB, 100);
-            gravSensor.start(OnsuccessCB);
+           // gravSensor.setChangeListener(gravOnchangedCB, 10);
+            //gravSensor.start(OnsuccessCB);
             //acclerometor sensor
-            accSensor.setChangeListener(accOnchangedCB, 100);
-            accSensor.start(OnsuccessCB);
+           // accSensor.setChangeListener(accOnchangedCB, 10);
+           // accSensor.start(OnsuccessCB);
             //linear accelerometer sensor
-            laccSensor.setChangeListener(laccOnchangedCB, 100);
+            laccSensor.setChangeListener(laccOnchangedCB, 10);
             laccSensor.start(OnsuccessCB);
         }else{
         	console.log('Stopping  sensors service');
-            gyroSensor.unsetChangeListener();
-            gyroSensor.stop();
-            gravSensor.unsetChangeListener();
-            gravSensor.stop();
+            //gyroSensor.unsetChangeListener();
+            //gyroSensor.stop();
+            //gravSensor.unsetChangeListener();
+            //gravSensor.stop();
+        	laccSensor.unsetChangeListener();
+        	laccSensor.stop();
         }
     	
     }
@@ -122,7 +125,7 @@ window.onload = function() {
         sendMessage("{\"type\":\"acc\",\"data\":{\"x\":"+sensorData.x.toFixed(8)+",\"y\":"+sensorData.y.toFixed(8)+",\"z\":"+sensorData.z.toFixed(8)+"}}");
     }
     function laccOnchangedCB(sensorData) {
-        sendMessage("{\"type\":\"lacc\",\"data\":{\"x\":"+sensorData.x.toFixed(8)+",\"y\":"+sensorData.y.toFixed(8)+",\"z\":"+sensorData.z.toFixed(8)+"}}");
+        sendMessage("{\"time\":" +  Date.now() + ",\"type\":\"lacc\",\"data\":{\"x\":"+sensorData.x.toFixed(8)+",\"y\":"+sensorData.y.toFixed(8)+",\"z\":"+sensorData.z.toFixed(8)+"}}");
     }
     
 
